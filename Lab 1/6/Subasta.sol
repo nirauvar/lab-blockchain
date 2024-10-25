@@ -10,9 +10,6 @@ contract Subasta {
     address public mayorPujador;
     uint public mayorPuja;
 
-    mapping(address => uint) devolucionesPendientes;
-    Pujas[] public todasLasPujas;
-
     bool finalizada;
     uint public tiempoExtension = 10 minutes;
 
@@ -104,19 +101,4 @@ contract Subasta {
         emit SubastaFinalizada(mayorPujador, mayorPuja);
     }
 
-    function obtenerBalance() public view returns (uint) {
-        return address(this).balance;
-    }
-
-    function obtenerTodasLasPujas() external view returns (Pujas[] memory) {
-        return todasLasPujas;
-    }
-
-    function retirar() external {
-        uint cantidad = devolucionesPendientes[msg.sender];
-        require(cantidad > 0, "No hay devoluciones pendientes");
-
-        devolucionesPendientes[msg.sender] = 0;
-        payable(msg.sender).transfer(cantidad);
-    }
 }
